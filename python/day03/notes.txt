@@ -1,0 +1,13 @@
+Key concepts:
+1. O(n) means one loop over the input.
+2. O(n²) means nested loops and is slower.
+3. set stores unique values.
+4. set is useful for checking whether a value appeared before.
+5. In Contains Duplicate, seen stores numbers that already appeared.
+6. If num in seen, it means duplicate is found.
+7. If num is not in seen, add it to seen.
+8. This solution is O(n) because it only uses one loop.
+
+Example:
+nums = [5, 8, 9, 5, 10]
+The second 5 is already in seen, so return True.
