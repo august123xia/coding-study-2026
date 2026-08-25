@@ -28,3 +28,34 @@ This repository tracks my Python, SQL, and coding interview study from August to
 ## Goal
 
 Prepare for Data Analyst, Data Engineer, and Software Engineer roles.
+
+
+
+# AR Invoice CSV Cleaner
+
+This project reads invoice data from a CSV file, filters unpaid invoices, and generates a summary of unpaid amounts by customer.
+
+## Input
+
+`data/invoices.csv`
+
+Columns:
+
+- invoice_id
+- customer
+- amount
+- status
+
+## Output
+
+`data/unpaid_summary.csv`
+
+The output file contains:
+
+- customer
+- unpaid_total
+
+## How to run
+
+```bash
+python3 cleaner.py

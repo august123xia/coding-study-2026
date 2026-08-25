@@ -1,0 +1,8 @@
+invoice_id,customer,amount,status
+1,Google,1200,paid
+2,Amazon,3500,unpaid
+3,Ali,800,unpaid
+4,Canva,2200,paid
+5,Dnata,5000,unpaid
+6,Google,1800,unpaid
+7,Amazon,2700,paid
