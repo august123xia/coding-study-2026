@@ -59,3 +59,13 @@ The output file contains:
 
 ```bash
 python3 cleaner.py
+
+## Update - Day 10
+
+Refactored the invoice summary logic into a reusable Pandas function.
+
+The function can generate customer-level summaries for different invoice statuses, such as paid and unpaid.
+
+Output files:
+- data/pandas_paid_summary_v2.csv
+- data/pandas_unpaid_summary_v2.csv
