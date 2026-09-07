@@ -1,0 +1,17 @@
+
+Dear Customer A,
+
+Please find below the current statement of account summary.
+
+1. Undisputed Unpaid Invoices
+Invoice No | Due Date | Amount
+INV001 | 2026-08-01 | $1,200.00
+INV002 | 2026-08-15 | $2,500.00
+INV004 | 2026-08-25 | $800.00
+
+Total undisputed unpaid amount: $4,500.00
+
+Please arrange payment for the undisputed overdue amount at your earliest convenience.
+
+Kind regards,
+AR Team
