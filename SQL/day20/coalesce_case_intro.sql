@@ -66,3 +66,18 @@ ORDER BY total_amount DESC;
 -- CASE WHEN creates a new calculated category based on conditions.
 -- The first matching WHEN condition is used.
 -- CASE WHEN is useful for customer priority, aging buckets, and risk levels.
+
+
+SELECT
+    customers.customer_name,
+    COALESCE(SUM(invoices.amount), 0) AS total_amount,
+    CASE
+        WHEN COALESCE(SUM(invoices, amount), 0) >= 5000 THEN 'High'
+        WHEN COALESCE(SUM(invoices, amount), 0) >= 1000 THEN 'Medium'
+        ELSE 'Low'
+    END AS customer_priority
+FROM customers
+LEFT JOIN invoices
+ON customers.customer_ID = invoices.customer_ID
+GROUP BY customers.customer_name
+ORDER BY total_amount DESC;
