@@ -30,31 +30,14 @@ INSERT INTO invoices VALUES
 (106, 1, 700, 'unpaid'),
 (107, 1, 600, 'unpaid');
 
-SELECT 
+SELECT
     customers.customer_name,
     COUNT(invoices.invoice_id) AS unpaid_count,
-    COALESCE(SUM(invoices.amount), 0) AS total_unpaid
+    SUM(invoices.amount) AS total_unpaid
 FROM customers
 LEFT JOIN invoices
 ON customers.customer_id = invoices.customer_id
-AND invoices.status = 'unpaid'
-GROUP BY customers.customer_name
-ORDER BY total_unpaid DESC;
-
-SELECT 
-    customers.customer_name,
-    COUNT(invoices.invoice_id) AS unpaid_count,
-    COALESCE(SUM(invoices.amount), 0) AS total_unpaid,
-    CASE
-        WHEN COALESCE(SUM(invoices.amount), 0) >= 5000 THEN 'High'
-        WHEN COALESCE(SUM(invoices.amount), 0) >= 3000 THEN 'Medium'
-        WHEN COALESCE(SUM(invoices.amount), 0) > 0 THEN 'Low'
-        ELSE 'No unpaid'
-    END AS risk_level
-FROM customers
-LEFT JOIN invoices
-ON customers.customer_id = invoices.customer_id
-AND invoices.status = 'unpaid'
-WHERE customers.country = 'USA'
-GROUP BY customers.customer_name
-ORDER BY total_unpaid DESC;
+WHERE status = 'unpaid'
+GROUP BY customers.customer_id
+HAVING SUM(invoices.amount) > 3000
+ORDER BY total_unpaid DESC
