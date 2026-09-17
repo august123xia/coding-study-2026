@@ -72,7 +72,7 @@ FROM invoices
 WHERE status = 'unpaid'
 AND CAST(julianday('2026-09-16') - julianday(due_date) AS INTEGER) > 0
 GROUP BY customer
-ORDER BY total_overdue DESC
+ORDER BY total_overdue DESC;
 
 -- Review:
 -- WHERE filters original invoice rows before grouping.
@@ -83,3 +83,93 @@ ORDER BY total_overdue DESC
 -- SUM(amount) calculates total overdue amount for each customer.
 -- CASE WHEN creates a priority level based on total_overdue.
 -- HAVING is used only when filtering grouped results such as SUM(amount).
+
+
+WITH invoice_with_days AS (
+    SELECT
+        invoice_id,
+        customer,
+        amount,
+        status,
+        due_date,
+        CAST(julianday('2026-09-16') - julianday(due_date) AS INTEGER) AS days_overdue
+    FROM invoices
+)
+SELECT 
+    invoice_id,
+    customer,
+    amount,
+    status,
+    due_date,
+    days_overdue
+FROM invoice_with_days
+WHERE status = 'unpaid'
+AND days_overdue > 0
+ORDER BY days_overdue DESC;
+
+
+-- Day 30 CTE customer overdue summary
+
+WITH invoice_with_days AS (
+    SELECT
+        invoice_id,
+        customer,
+        amount,
+        status,
+        due_date,
+        CAST(julianday('2026-09-16') - julianday(due_date) AS INTEGER) AS days_overdue
+    FROM invoices
+)
+SELECT
+    customer,
+    COUNT(*) AS overdue_count,
+    SUM(amount) AS total_overdue,
+    CASE
+        WHEN SUM(amount) >= 5000 THEN 'High'
+        WHEN SUM(amount) >= 3000 THEN 'Medium'
+        ELSE 'Low'
+    END AS priority
+FROM invoice_with_days
+WHERE status = 'unpaid'
+AND days_overdue > 0
+GROUP BY customer
+ORDER BY total_overdue DESC;
+
+-- Day 30 Multiple CTEs
+
+WITH invoice_with_days AS (
+    SELECT
+        invoice_id,
+        customer,
+        amount,
+        status,
+        due_date,
+        CAST(julianday('2026-09-16') - julianday(due_date) AS INTEGER) AS days_overdue
+    FROM invoices
+),
+
+overdue_invoices AS (
+    SELECT
+        invoice_id,
+        customer,
+        amount,
+        status,
+        due_date,
+        days_overdue
+    FROM invoice_with_days
+    WHERE status = 'unpaid'
+    AND days_overdue > 0
+)
+
+SELECT
+    customer,
+    COUNT(*) AS overdue_count,
+    SUM(amount) AS total_overdue,
+    CASE
+        WHEN SUM(amount) >= 5000 THEN 'High'
+        WHEN SUM(amount) >= 3000 THEN 'Medium'
+        ELSE 'Low'
+    END AS priority
+FROM overdue_invoices
+GROUP BY customer
+ORDER BY total_overdue DESC;
